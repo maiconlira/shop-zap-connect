@@ -14,25 +14,65 @@ export type Product = {
   category: string;
   description: string;
   image: string;
+  /** IDs de modelos compatíveis. Vazio/undefined = produto universal. */
+  compatibility?: string[];
 };
 
-export const products: Product[] = [
-  {
-    id: "capinha-silicone",
-    name: "Capinha Silicone Premium",
-    price: 39.9,
-    category: "Capinhas",
-    description: "Capa em silicone com toque aveludado, proteção total contra quedas e arranhões.",
-    image: capinha,
-  },
-  {
-    id: "pelicula-vidro",
-    name: "Película de Vidro 3D",
-    price: 24.9,
-    category: "Películas",
-    description: "Película de vidro temperado com cobertura total, alta dureza e instalação fácil.",
-    image: pelicula,
-  },
+// Helper: gera variações de capinha/película para uma lista de modelos
+const makeCase = (modelId: string, modelName: string): Product => ({
+  id: `capinha-${modelId}`,
+  name: `Capinha Silicone — ${modelName}`,
+  price: 39.9,
+  category: "Capinhas",
+  description: `Capa em silicone com toque aveludado, recortes precisos para ${modelName}.`,
+  image: capinha,
+  compatibility: [modelId],
+});
+
+const makeFilm = (modelId: string, modelName: string): Product => ({
+  id: `pelicula-${modelId}`,
+  name: `Película de Vidro 3D — ${modelName}`,
+  price: 24.9,
+  category: "Películas",
+  description: `Película de vidro temperado com cobertura total para ${modelName}.`,
+  image: pelicula,
+  compatibility: [modelId],
+});
+
+// Modelos com cobertura específica de capinha + película
+const specificModels: Array<[string, string]> = [
+  ["iphone-15-pro-max", "iPhone 15 Pro Max"],
+  ["iphone-15-pro", "iPhone 15 Pro"],
+  ["iphone-15", "iPhone 15"],
+  ["iphone-14-pro", "iPhone 14 Pro"],
+  ["iphone-14", "iPhone 14"],
+  ["iphone-13", "iPhone 13"],
+  ["iphone-12", "iPhone 12"],
+  ["galaxy-s24-ultra", "Galaxy S24 Ultra"],
+  ["galaxy-s24", "Galaxy S24"],
+  ["galaxy-s23", "Galaxy S23"],
+  ["galaxy-a55", "Galaxy A55"],
+  ["galaxy-a54", "Galaxy A54"],
+  ["galaxy-a34", "Galaxy A34"],
+  ["galaxy-a15", "Galaxy A15"],
+  ["redmi-note-13-pro", "Redmi Note 13 Pro"],
+  ["redmi-note-13", "Redmi Note 13"],
+  ["redmi-note-12", "Redmi Note 12"],
+  ["poco-x6-pro", "Poco X6 Pro"],
+  ["xiaomi-14", "Xiaomi 14"],
+  ["moto-g84", "Moto G84"],
+  ["moto-g54", "Moto G54"],
+  ["moto-g34", "Moto G34"],
+  ["edge-50-pro", "Edge 50 Pro"],
+  ["edge-40", "Edge 40"],
+];
+
+const specificProducts: Product[] = specificModels.flatMap(([id, name]) => [
+  makeCase(id, name),
+  makeFilm(id, name),
+]);
+
+const universalProducts: Product[] = [
   {
     id: "carregador-turbo",
     name: "Carregador Turbo 25W",
@@ -82,5 +122,7 @@ export const products: Product[] = [
     image: powerbank,
   },
 ];
+
+export const products: Product[] = [...specificProducts, ...universalProducts];
 
 export const categories = ["Todos", ...Array.from(new Set(products.map((p) => p.category)))];

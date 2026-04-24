@@ -70,9 +70,6 @@ export const PromoHighlights = () => {
       id="promocoes"
       className="relative overflow-hidden bg-gradient-to-b from-secondary to-secondary/95 py-16 md:py-24"
     >
-      {/* Glow decorativo */}
-      <div className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-primary/20 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-primary-glow/20 blur-3xl" />
 
       <div className="container relative">
         <div className="text-center max-w-2xl mx-auto mb-10">

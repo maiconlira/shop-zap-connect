@@ -92,54 +92,44 @@ export const PromoHighlights = () => {
 
         {/* Grid principal: 1 hero + grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 md:gap-6">
-          {/* Hero promo card */}
-          <Card className="lg:col-span-1 lg:row-span-2 group relative overflow-hidden border-0 bg-gradient-to-br from-primary to-primary-glow text-primary-foreground shadow-elegant">
-            <div className="absolute top-4 right-4 z-10">
-              <Badge className="bg-secondary text-secondary-foreground hover:bg-secondary px-3 py-1.5 text-xs font-extrabold">
-                <Timer className="h-3 w-3 mr-1" />
+          {/* Hero promo card — clean */}
+          <Card className="lg:col-span-1 lg:row-span-2 group relative overflow-hidden border-0 bg-card shadow-elegant">
+            <div className="absolute top-4 left-4 z-10">
+              <Badge className="bg-primary text-primary-foreground hover:bg-primary px-3 py-1 text-[11px] font-bold tracking-wide">
                 {hero.tag}
               </Badge>
             </div>
-            <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[55%] overflow-hidden">
+            <div className="relative aspect-[4/3] lg:aspect-auto lg:h-[58%] overflow-hidden bg-muted">
               <img
                 src={hero.product.image}
                 alt={hero.product.name}
                 loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent" />
             </div>
-            <CardContent className="p-6 flex flex-col gap-4">
-              <div className="flex items-center gap-2">
-                <Badge
-                  variant="secondary"
-                  className="bg-primary-foreground/20 text-primary-foreground border-0 backdrop-blur"
-                >
-                  {hero.product.category}
-                </Badge>
-                <div className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider">
-                  <Tag className="h-3 w-3" />
-                  -{Math.round(hero.discount * 100)}% OFF
-                </div>
-              </div>
-              <h3 className="font-extrabold text-2xl md:text-3xl leading-tight">
+            <CardContent className="p-6 flex flex-col gap-3">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {hero.product.category}
+              </span>
+              <h3 className="font-bold text-xl md:text-2xl leading-tight text-foreground">
                 {hero.product.name}
               </h3>
-              <p className="text-primary-foreground/85 text-sm leading-relaxed">
-                {hero.product.description}
-              </p>
-              <div className="flex items-baseline gap-3 mt-auto">
-                <span className="text-sm line-through opacity-70">
+              <div className="flex items-baseline gap-3 mt-2">
+                <span className="text-sm line-through text-muted-foreground">
                   {formatBRL(heroOldPrice)}
                 </span>
-                <span className="text-3xl md:text-4xl font-extrabold">
+                <span className="text-3xl font-extrabold text-primary">
                   {formatBRL(heroNewPrice)}
+                </span>
+                <span className="ml-auto text-xs font-bold text-primary">
+                  -{Math.round(hero.discount * 100)}%
                 </span>
               </div>
               <Button
                 onClick={() => handleAdd(hero.product)}
                 size="lg"
-                className="bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold"
+                variant="hero"
+                className="mt-2 w-full font-bold"
               >
                 <ShoppingCart />
                 Garantir oferta

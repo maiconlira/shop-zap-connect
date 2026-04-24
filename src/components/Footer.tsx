@@ -1,4 +1,4 @@
-import logo from "@/assets/logo.jpg";
+import logo from "@/assets/logo.png";
 import { whatsappLink, buildQuestionMessage, WHATSAPP_NUMBER } from "@/lib/whatsapp";
 import { MessageCircle } from "lucide-react";
 

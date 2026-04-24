@@ -1,11 +1,36 @@
-import capinha from "@/assets/produto-capinha.jpg";
-import pelicula from "@/assets/produto-pelicula.jpg";
+import capinhaPadrao from "@/assets/produto-capinha.jpg";
+import capinhaPreta from "@/assets/capinha-preta.jpg";
+import capinhaTransparente from "@/assets/capinha-transparente.jpg";
+import capinhaAzul from "@/assets/capinha-azul.jpg";
+import capinhaVermelha from "@/assets/capinha-vermelha.jpg";
+import capinhaRosa from "@/assets/capinha-rosa.jpg";
+import capinhaArmor from "@/assets/capinha-armor.jpg";
+import peliculaVidro from "@/assets/produto-pelicula.jpg";
+import peliculaPrivacidade from "@/assets/pelicula-privacidade.jpg";
+import peliculaFosca from "@/assets/pelicula-fosca.jpg";
 import carregador from "@/assets/produto-carregador.jpg";
 import caixaSom from "@/assets/produto-caixa-som.jpg";
 import fone from "@/assets/produto-fone.jpg";
 import cabo from "@/assets/produto-cabo.jpg";
 import suporte from "@/assets/produto-suporte.jpg";
 import powerbank from "@/assets/produto-powerbank.jpg";
+
+// Variações visuais — alternadas entre os modelos para diversificar a galeria
+const caseVariants = [
+  { img: capinhaPreta, label: "Preta", finish: "silicone preto fosco" },
+  { img: capinhaTransparente, label: "Transparente", finish: "silicone transparente com bordas reforçadas" },
+  { img: capinhaAzul, label: "Azul Marinho", finish: "silicone azul marinho aveludado" },
+  { img: capinhaVermelha, label: "Vermelha", finish: "silicone vermelho premium" },
+  { img: capinhaRosa, label: "Rosa", finish: "silicone rosa pastel" },
+  { img: capinhaArmor, label: "Armor Carbon", finish: "armor antichoque com fibra de carbono" },
+  { img: capinhaPadrao, label: "Clássica", finish: "silicone com toque aveludado" },
+] as const;
+
+const filmVariants = [
+  { img: peliculaVidro, label: "Vidro 3D", desc: "Película de vidro temperado 3D com cobertura total" },
+  { img: peliculaPrivacidade, label: "Privacidade", desc: "Película de vidro com filtro de privacidade" },
+  { img: peliculaFosca, label: "Fosca Anti-Reflexo", desc: "Película fosca anti-reflexo com toque suave" },
+] as const;
 
 export type Product = {
   id: string;
@@ -19,25 +44,31 @@ export type Product = {
 };
 
 // Helper: gera variações de capinha/película para uma lista de modelos
-const makeCase = (modelId: string, modelName: string): Product => ({
-  id: `capinha-${modelId}`,
-  name: `Capinha Silicone — ${modelName}`,
-  price: 39.9,
-  category: "Capinhas",
-  description: `Capa em silicone com toque aveludado, recortes precisos para ${modelName}.`,
-  image: capinha,
-  compatibility: [modelId],
-});
+const makeCase = (modelId: string, modelName: string, index: number): Product => {
+  const variant = caseVariants[index % caseVariants.length];
+  return {
+    id: `capinha-${modelId}`,
+    name: `Capinha ${variant.label} — ${modelName}`,
+    price: 39.9,
+    category: "Capinhas",
+    description: `Capa em ${variant.finish}, com recortes precisos para ${modelName}.`,
+    image: variant.img,
+    compatibility: [modelId],
+  };
+};
 
-const makeFilm = (modelId: string, modelName: string): Product => ({
-  id: `pelicula-${modelId}`,
-  name: `Película de Vidro 3D — ${modelName}`,
-  price: 24.9,
-  category: "Películas",
-  description: `Película de vidro temperado com cobertura total para ${modelName}.`,
-  image: pelicula,
-  compatibility: [modelId],
-});
+const makeFilm = (modelId: string, modelName: string, index: number): Product => {
+  const variant = filmVariants[index % filmVariants.length];
+  return {
+    id: `pelicula-${modelId}`,
+    name: `Película ${variant.label} — ${modelName}`,
+    price: 24.9,
+    category: "Películas",
+    description: `${variant.desc} para ${modelName}.`,
+    image: variant.img,
+    compatibility: [modelId],
+  };
+};
 
 // Modelos com cobertura específica de capinha + película
 const specificModels: Array<[string, string]> = [
@@ -67,9 +98,9 @@ const specificModels: Array<[string, string]> = [
   ["edge-40", "Edge 40"],
 ];
 
-const specificProducts: Product[] = specificModels.flatMap(([id, name]) => [
-  makeCase(id, name),
-  makeFilm(id, name),
+const specificProducts: Product[] = specificModels.flatMap(([id, name], i) => [
+  makeCase(id, name, i),
+  makeFilm(id, name, i),
 ]);
 
 const universalProducts: Product[] = [

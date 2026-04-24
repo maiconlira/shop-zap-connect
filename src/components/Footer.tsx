@@ -1,6 +1,9 @@
 import logo from "@/assets/logo.png";
 import { whatsappLink, buildQuestionMessage, WHATSAPP_NUMBER } from "@/lib/whatsapp";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, MapPin, Phone, Clock } from "lucide-react";
+
+const ADDRESS = "Rua Paulo Rezer, 950-A, Centro, Porto dos Gaúchos - MT, 78560-000";
+const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`;
 
 const formatPhone = (n: string) => {
   // 55 66 84235499 -> +55 (66) 8423-5499
@@ -24,9 +27,26 @@ export const Footer = () => (
       </div>
       <div>
         <h4 className="font-bold mb-3">Contato</h4>
-        <ul className="space-y-2 text-sm text-secondary-foreground/80">
-          <li>{formatPhone(WHATSAPP_NUMBER)}</li>
-          <li>Atendimento de segunda a sábado</li>
+        <ul className="space-y-3 text-sm text-secondary-foreground/80">
+          <li className="flex items-start gap-2">
+            <Phone className="h-4 w-4 mt-0.5 shrink-0 text-primary" />
+            <span>{formatPhone(WHATSAPP_NUMBER)}</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <MapPin className="h-4 w-4 mt-0.5 shrink-0 text-primary" />
+            <a
+              href={MAPS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-secondary-foreground transition-smooth"
+            >
+              {ADDRESS}
+            </a>
+          </li>
+          <li className="flex items-start gap-2">
+            <Clock className="h-4 w-4 mt-0.5 shrink-0 text-primary" />
+            <span>Atendimento de segunda a sábado</span>
+          </li>
         </ul>
       </div>
       <div>

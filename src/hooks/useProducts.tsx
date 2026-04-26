@@ -1,15 +1,8 @@
 import { useCallback, useContext, useEffect, useMemo, useState, ReactNode } from "react";
-import { products as defaultProducts, type Product } from "@/data/products";
-import { ProductsContext, type ProductsContextType } from "./products-context";
+import { products as defaultProducts } from "@/data/products";
+import { ProductsContext, type ProductsContextType, type ManagedProduct } from "./products-context";
 
-export type ManagedProduct = Product & {
-  /** Marca o produto como destaque na seção de promoções */
-  promo?: boolean;
-  /** Desconto em % aplicado quando promo === true (0-100) */
-  discount?: number;
-  /** Texto opcional para a etiqueta da promoção */
-  promoTag?: string;
-};
+export type { ManagedProduct } from "./products-context";
 
 const STORAGE_KEY = "smartcell:products:v3";
 

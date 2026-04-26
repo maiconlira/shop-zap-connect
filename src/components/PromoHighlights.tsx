@@ -8,6 +8,12 @@ import { useCart } from "@/hooks/useCart";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
+const formatPrice = (value: number) =>
+  value.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+
 type PromoItem = {
   product: Product;
   tag: string;
@@ -107,6 +113,14 @@ export const PromoHighlights = () => {
               <p className="text-sm text-muted-foreground line-clamp-2">
                 {hero.product.description}
               </p>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-3xl font-extrabold text-primary">
+                  {formatPrice(hero.product.price)}
+                </span>
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  à vista
+                </span>
+              </div>
               <Button
                 onClick={() => handleAdd(hero.product)}
                 size="lg"
@@ -153,6 +167,9 @@ export const PromoHighlights = () => {
                     <p className="text-xs text-muted-foreground line-clamp-2">
                       {promo.product.description}
                     </p>
+                    <span className="text-lg font-extrabold text-primary">
+                      {formatPrice(promo.product.price)}
+                    </span>
                     <Button
                       onClick={() => handleAdd(promo.product)}
                       variant="hero"

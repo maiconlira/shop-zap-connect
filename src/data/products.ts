@@ -14,6 +14,12 @@ import fone from "@/assets/produto-fone.jpg";
 import cabo from "@/assets/produto-cabo.jpg";
 import suporte from "@/assets/produto-suporte.jpg";
 import powerbank from "@/assets/produto-powerbank.jpg";
+import garrafa from "@/assets/produto-garrafa.jpg";
+import garrafaSport from "@/assets/produto-garrafa-sport.jpg";
+import copo from "@/assets/produto-copo.jpg";
+import copoTermico from "@/assets/produto-copo-termico.jpg";
+import foneOver from "@/assets/produto-fone-over.jpg";
+import caixaSom2 from "@/assets/produto-caixa-som-2.jpg";
 
 // Variações visuais — alternadas entre os modelos para diversificar a galeria
 const caseVariants = [
@@ -151,6 +157,54 @@ const universalProducts: Product[] = [
     category: "Carregadores",
     description: "Bateria portátil com carga rápida e display de carga, leve e compacta.",
     image: powerbank,
+  },
+  {
+    id: "fone-over-ear",
+    name: "Headphone Bluetooth Over-Ear",
+    price: 249.9,
+    category: "Áudio",
+    description: "Fone over-ear com som premium, almofadas confortáveis e bateria de longa duração.",
+    image: foneOver,
+  },
+  {
+    id: "caixa-som-portatil",
+    name: "Caixa de Som Portátil 360º",
+    price: 219.9,
+    category: "Áudio",
+    description: "Som imersivo 360º, à prova d'água e bateria para o dia todo.",
+    image: caixaSom2,
+  },
+  {
+    id: "garrafa-termica-preta",
+    name: "Garrafa Térmica Inox 750ml",
+    price: 89.9,
+    category: "Garrafas",
+    description: "Garrafa em aço inox com isolamento térmico, mantém a temperatura por até 12h.",
+    image: garrafa,
+  },
+  {
+    id: "garrafa-sport",
+    name: "Garrafa Sport com Alça 1L",
+    price: 69.9,
+    category: "Garrafas",
+    description: "Garrafa esportiva resistente com alça e bico prático para o dia a dia.",
+    image: garrafaSport,
+  },
+  {
+    id: "copo-tumbler",
+    name: "Copo Tumbler com Canudo 600ml",
+    price: 49.9,
+    category: "Copos",
+    description: "Copo reutilizável com tampa e canudo, ideal para sucos, água e drinks gelados.",
+    image: copo,
+  },
+  {
+    id: "copo-termico-viagem",
+    name: "Copo Térmico de Viagem 450ml",
+    price: 79.9,
+    category: "Copos",
+    description: "Copo térmico elegante, perfeito para café e bebidas quentes em qualquer lugar.",
+    image: copoTermico,
   },
 ];
 

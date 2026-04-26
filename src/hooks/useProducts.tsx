@@ -10,9 +10,23 @@ export type ManagedProduct = Product & {
   promoTag?: string;
 };
 
-const STORAGE_KEY = "smartcell:products:v1";
+const STORAGE_KEY = "smartcell:products:v2";
 
-const seed = (): ManagedProduct[] => defaultProducts.map((p) => ({ ...p }));
+// Promoções iniciais — produtos em destaque já marcados como promo
+const DEFAULT_PROMOS: Record<string, { discount: number; promoTag?: string }> = {
+  "fone-tws": { discount: 25, promoTag: "MAIS VENDIDO" },
+  "carregador-turbo": { discount: 20, promoTag: "OFERTA RELÂMPAGO" },
+  "caixa-som-bluetooth": { discount: 15, promoTag: "SUPER OFERTA" },
+  "powerbank-10000": { discount: 18, promoTag: "FRETE GRÁTIS" },
+  "garrafa-termica-preta": { discount: 30, promoTag: "QUEIMA DE ESTOQUE" },
+  "copo-tumbler": { discount: 22, promoTag: "ÚLTIMAS UNIDADES" },
+};
+
+const seed = (): ManagedProduct[] =>
+  defaultProducts.map((p) => {
+    const promo = DEFAULT_PROMOS[p.id];
+    return promo ? { ...p, promo: true, ...promo } : { ...p };
+  });
 
 const loadFromStorage = (): ManagedProduct[] => {
   if (typeof window === "undefined") return seed();

@@ -1,14 +1,8 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, ReactNode } from "react";
-import { products as defaultProducts, type Product } from "@/data/products";
+import { useCallback, useContext, useEffect, useMemo, useState, ReactNode } from "react";
+import { products as defaultProducts } from "@/data/products";
+import { ProductsContext, type ProductsContextType, type ManagedProduct } from "./products-context";
 
-export type ManagedProduct = Product & {
-  /** Marca o produto como destaque na seção de promoções */
-  promo?: boolean;
-  /** Desconto em % aplicado quando promo === true (0-100) */
-  discount?: number;
-  /** Texto opcional para a etiqueta da promoção */
-  promoTag?: string;
-};
+export type { ManagedProduct } from "./products-context";
 
 const STORAGE_KEY = "smartcell:products:v3";
 
@@ -60,20 +54,6 @@ const persist = (list: ManagedProduct[]) => {
     // ignore quota errors
   }
 };
-
-type ProductsContextType = {
-  products: ManagedProduct[];
-  categories: string[];
-  promos: ManagedProduct[];
-  addProduct: (p: Omit<ManagedProduct, "id"> & { id?: string }) => ManagedProduct;
-  updateProduct: (id: string, patch: Partial<ManagedProduct>) => void;
-  deleteProduct: (id: string) => void;
-  resetToDefaults: () => void;
-  /** Retorna o preço final aplicando desconto se houver */
-  effectivePrice: (p: ManagedProduct) => number;
-};
-
-const ProductsContext = createContext<ProductsContextType | null>(null);
 
 export const ProductsProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<ManagedProduct[]>(() => loadFromStorage());

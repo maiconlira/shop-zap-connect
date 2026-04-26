@@ -10,7 +10,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, ShoppingCart, Headphones, Speaker, Coffee, Droplet } from "lucide-react";
+import { Sparkles, ShoppingCart, Headphones, Speaker, GlassWater } from "lucide-react";
 import { products, type Product } from "@/data/products";
 import { useCart } from "@/hooks/useCart";
 import { toast } from "sonner";
@@ -46,20 +46,12 @@ const GROUPS: CarouselGroup[] = [
     filter: (p) => p.category === "Áudio" && p.name.toLowerCase().includes("caixa"),
   },
   {
-    id: "copos",
-    title: "Nossos",
-    highlight: "Copos",
-    description: "Drinkware estiloso para água, café e bebidas geladas.",
-    icon: Coffee,
-    filter: (p) => p.category === "Copos",
-  },
-  {
-    id: "garrafas",
-    title: "Nossas",
+    id: "drinkware",
+    title: "Copos &",
     highlight: "Garrafas",
-    description: "Mantêm a temperatura por horas — perfeitas para qualquer rotina.",
-    icon: Droplet,
-    filter: (p) => p.category === "Garrafas",
+    description: "Drinkware estiloso e térmico para água, café e bebidas geladas.",
+    icon: GlassWater,
+    filter: (p) => p.category === "Copos" || p.category === "Garrafas",
   },
 ];
 

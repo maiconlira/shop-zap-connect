@@ -10,16 +10,12 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, ShoppingCart, Headphones, Speaker, GlassWater, MessageCircle } from "lucide-react";
+import { Sparkles, ShoppingCart, Headphones, Speaker, GlassWater } from "lucide-react";
 import { useProducts, type ManagedProduct } from "@/hooks/useProducts";
 import type { Product } from "@/data/products";
 import { useCart } from "@/hooks/useCart";
 import { toast } from "sonner";
-import { whatsappLink, buildQuestionMessage } from "@/lib/whatsapp";
 import type { LucideIcon } from "lucide-react";
-
-const formatPrice = (value: number) =>
-  value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 type CarouselGroup = {
   id: string;
@@ -62,13 +58,12 @@ const GROUPS: CarouselGroup[] = [
 
 type RowProps = {
   group: CarouselGroup;
-  items: ManagedProduct[];
-  onAdd: (p: ManagedProduct) => void;
+  items: Product[];
+  onAdd: (p: Product) => void;
   delay: number;
-  effectivePrice: (p: ManagedProduct) => number;
 };
 
-const CarouselRow = ({ group, items, onAdd, delay, effectivePrice }: RowProps) => {
+const CarouselRow = ({ group, items, onAdd, delay }: RowProps) => {
   const Icon = group.icon;
   return (
     <div className="space-y-6">
@@ -117,40 +112,15 @@ const CarouselRow = ({ group, items, onAdd, delay, effectivePrice }: RowProps) =
                   <p className="text-sm text-muted-foreground line-clamp-2 flex-1">
                     {product.description}
                   </p>
-                  {product.promo ? (
-                    <>
-                      <div className="flex items-baseline gap-2">
-                        {product.discount && product.discount > 0 && (
-                          <span className="text-sm text-muted-foreground line-through">
-                            {formatPrice(product.price)}
-                          </span>
-                        )}
-                        <span className="text-lg font-extrabold text-primary">
-                          {formatPrice(effectivePrice(product))}
-                        </span>
-                      </div>
-                      <Button
-                        onClick={() => onAdd(product)}
-                        variant="hero"
-                        size="default"
-                        className="w-full"
-                      >
-                        <ShoppingCart />
-                        Adicionar
-                      </Button>
-                    </>
-                  ) : (
-                    <Button asChild variant="hero" size="default" className="w-full">
-                      <a
-                        href={whatsappLink(buildQuestionMessage(product.name))}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <MessageCircle />
-                        Consultar no WhatsApp
-                      </a>
-                    </Button>
-                  )}
+                  <Button
+                    onClick={() => onAdd(product)}
+                    variant="hero"
+                    size="default"
+                    className="w-full"
+                  >
+                    <ShoppingCart />
+                    Adicionar
+                  </Button>
                 </CardContent>
               </Card>
             </CarouselItem>
@@ -165,7 +135,7 @@ const CarouselRow = ({ group, items, onAdd, delay, effectivePrice }: RowProps) =
 
 export const FeaturedCarousel = () => {
   const { add } = useCart();
-  const { products, effectivePrice } = useProducts();
+  const { products } = useProducts();
 
   const grouped = useMemo(
     () =>
@@ -175,9 +145,8 @@ export const FeaturedCarousel = () => {
     [products],
   );
 
-  const handleAdd = (product: ManagedProduct) => {
-    const finalPrice = product.promo ? effectivePrice(product) : product.price;
-    add({ ...product, price: finalPrice }, 1);
+  const handleAdd = (product: Product) => {
+    add(product, 1);
     toast.success("Adicionado ao carrinho", { description: product.name });
   };
 
@@ -209,7 +178,6 @@ export const FeaturedCarousel = () => {
               items={items}
               onAdd={handleAdd}
               delay={3500 + i * 700}
-              effectivePrice={effectivePrice}
             />
           ))}
         </div>

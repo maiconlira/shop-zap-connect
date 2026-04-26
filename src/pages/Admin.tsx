@@ -372,6 +372,9 @@ const AdminInner = () => {
           </Card>
         </div>
 
+        {/* Gerenciador de promoções */}
+        <PromoManager />
+
         {/* Toolbar */}
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
           <div className="relative flex-1">

@@ -9,9 +9,6 @@ import { whatsappLink, buildQuestionMessage } from "@/lib/whatsapp";
 
 type Props = { product: Product };
 
-const formatBRL = (n: number) =>
-  n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-
 export const ProductCard = ({ product }: Props) => {
   const { add } = useCart();
 

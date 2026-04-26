@@ -34,7 +34,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ProductsProvider, useProducts, type ManagedProduct } from "@/hooks/useProducts";
+import { useProducts, type ManagedProduct } from "@/hooks/useProducts";
 import { PromoManager } from "@/components/admin/PromoManager";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import {
@@ -562,11 +562,7 @@ const AdminInner = () => {
 const Admin = () => {
   const { authed } = useAdminAuth();
   if (!authed) return <Navigate to="/admin/login" replace />;
-  return (
-    <ProductsProvider>
-      <AdminInner />
-    </ProductsProvider>
-  );
+  return <AdminInner />;
 };
 
 export default Admin;

@@ -20,6 +20,18 @@ import copo from "@/assets/produto-copo.jpg";
 import copoTermico from "@/assets/produto-copo-termico.jpg";
 import foneOver from "@/assets/produto-fone-over.jpg";
 import caixaSom2 from "@/assets/produto-caixa-som-2.jpg";
+import foneTwsBranco from "@/assets/produto-fone-tws-branco.jpg";
+import foneGamer from "@/assets/produto-fone-gamer.jpg";
+import foneSport from "@/assets/produto-fone-sport.jpg";
+import caixaMini from "@/assets/produto-caixa-mini.jpg";
+import caixaParty from "@/assets/produto-caixa-party.jpg";
+import caixaAprovaDagua from "@/assets/produto-caixa-aprova-dagua.jpg";
+import copoStanley from "@/assets/produto-copo-stanley.jpg";
+import copoVidro from "@/assets/produto-copo-vidro.jpg";
+import caneca from "@/assets/produto-caneca.jpg";
+import squeeze from "@/assets/produto-squeeze.jpg";
+import garrafaBambu from "@/assets/produto-garrafa-bambu.jpg";
+import garrafaKids from "@/assets/produto-garrafa-kids.jpg";
 
 // Variações visuais — alternadas entre os modelos para diversificar a galeria
 const caseVariants = [
@@ -205,6 +217,106 @@ const universalProducts: Product[] = [
     category: "Copos",
     description: "Copo térmico elegante, perfeito para café e bebidas quentes em qualquer lugar.",
     image: copoTermico,
+  },
+  // === Fones extras ===
+  {
+    id: "fone-tws-branco",
+    name: "Fone Bluetooth TWS Branco",
+    price: 159.9,
+    category: "Áudio",
+    description: "Fone sem fio TWS com design clean, microfone embutido e estojo de carregamento rápido.",
+    image: foneTwsBranco,
+  },
+  {
+    id: "fone-gamer-rgb",
+    name: "Headphone Gamer RGB",
+    price: 219.9,
+    category: "Áudio",
+    description: "Headset gamer com iluminação RGB, microfone retrátil e som surround imersivo.",
+    image: foneGamer,
+  },
+  {
+    id: "fone-sport-neckband",
+    name: "Fone Bluetooth Sport Neckband",
+    price: 129.9,
+    category: "Áudio",
+    description: "Fone esportivo com arco flexível, resistente ao suor e bateria de longa duração.",
+    image: foneSport,
+  },
+  // === Caixas de Som extras ===
+  {
+    id: "caixa-mini-bluetooth",
+    name: "Mini Caixa Bluetooth Compacta",
+    price: 99.9,
+    category: "Áudio",
+    description: "Caixa de som mini portátil com som potente, ideal para levar para qualquer lugar.",
+    image: caixaMini,
+  },
+  {
+    id: "caixa-party-led",
+    name: "Caixa de Som Party LED",
+    price: 399.9,
+    category: "Áudio",
+    description: "Caixa amplificada para festas, com luzes LED, alça e bateria de longa duração.",
+    image: caixaParty,
+  },
+  {
+    id: "caixa-aprova-dagua",
+    name: "Caixa de Som À Prova D'água",
+    price: 179.9,
+    category: "Áudio",
+    description: "Caixa robusta IPX7 à prova d'água, perfeita para piscina, praia e aventuras.",
+    image: caixaAprovaDagua,
+  },
+  // === Copos extras ===
+  {
+    id: "copo-stanley-style",
+    name: "Copo Térmico com Alça 1L",
+    price: 129.9,
+    category: "Copos",
+    description: "Copo térmico de inox com alça, mantém gelado por horas — estilo Stanley.",
+    image: copoStanley,
+  },
+  {
+    id: "copo-vidro-bambu",
+    name: "Copo de Vidro com Tampa Bambu",
+    price: 39.9,
+    category: "Copos",
+    description: "Copo de vidro com tampa de bambu e canudo ecológico, design minimalista.",
+    image: copoVidro,
+  },
+  {
+    id: "caneca-ceramica",
+    name: "Caneca de Cerâmica Moderna",
+    price: 29.9,
+    category: "Copos",
+    description: "Caneca de cerâmica preto e branco com design moderno, ideal para café e chá.",
+    image: caneca,
+  },
+  // === Garrafas extras ===
+  {
+    id: "squeeze-sport",
+    name: "Squeeze Sport 700ml",
+    price: 34.9,
+    category: "Garrafas",
+    description: "Squeeze esportivo com bico prático e alça, leve e resistente para academia.",
+    image: squeeze,
+  },
+  {
+    id: "garrafa-bambu-premium",
+    name: "Garrafa Premium Tampa Bambu 500ml",
+    price: 99.9,
+    category: "Garrafas",
+    description: "Garrafa térmica em inox com tampa de bambu, design elegante e sustentável.",
+    image: garrafaBambu,
+  },
+  {
+    id: "garrafa-kids",
+    name: "Garrafa Infantil com Alça 500ml",
+    price: 49.9,
+    category: "Garrafas",
+    description: "Garrafa colorida para crianças, com bico de segurança e alça para transporte.",
+    image: garrafaKids,
   },
 ];
 

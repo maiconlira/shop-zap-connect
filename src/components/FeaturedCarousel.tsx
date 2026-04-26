@@ -32,9 +32,10 @@ const GROUPS: CarouselGroup[] = [
     highlight: "Ouvido",
     description: "Som imersivo, conforto e liberdade sem fio para o seu dia.",
     icon: Headphones,
-    filter: (p) =>
-      p.category === "Áudio" &&
-      (p.name.toLowerCase().includes("fone") || p.name.toLowerCase().includes("headphone")),
+    filter: (p) => {
+      const n = p.name.toLowerCase();
+      return p.category === "Áudio" && (n.includes("fone") || n.includes("headphone") || n.includes("headset"));
+    },
   },
   {
     id: "caixas",

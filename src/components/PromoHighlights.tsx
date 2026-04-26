@@ -167,6 +167,9 @@ export const PromoHighlights = () => {
                     <p className="text-xs text-muted-foreground line-clamp-2">
                       {promo.product.description}
                     </p>
+                    <span className="text-lg font-extrabold text-primary">
+                      {formatPrice(promo.product.price)}
+                    </span>
                     <Button
                       onClick={() => handleAdd(promo.product)}
                       variant="hero"

@@ -1,5 +1,14 @@
 import { createContext } from "react";
-import type { ManagedProduct } from "@/hooks/useProducts";
+import type { Product } from "@/data/products";
+
+export type ManagedProduct = Product & {
+  /** Marca o produto como destaque na seção de promoções */
+  promo?: boolean;
+  /** Desconto em % aplicado quando promo === true (0-100) */
+  discount?: number;
+  /** Texto opcional para a etiqueta da promoção */
+  promoTag?: string;
+};
 
 export type ProductsContextType = {
   products: ManagedProduct[];

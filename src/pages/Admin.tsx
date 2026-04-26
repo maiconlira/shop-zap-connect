@@ -34,11 +34,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useProducts, type ManagedProduct } from "@/hooks/useProducts";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
+import { PromotionsPanel } from "@/components/admin/PromotionsPanel";
 import {
   ArrowLeft,
   Flame,
+  LayoutGrid,
   LogOut,
   Pencil,
   Plus,

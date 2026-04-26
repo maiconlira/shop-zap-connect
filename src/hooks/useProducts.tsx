@@ -40,6 +40,21 @@ const seed = (): ManagedProduct[] => {
   return list;
 };
 
+const ensurePromos = (list: ManagedProduct[]): ManagedProduct[] => {
+  if (list.some((p) => p.promo)) return list;
+  const usedIds = new Set<string>();
+  return list.map((p) => {
+    const preset = PROMO_PRESETS.find(
+      (pr) =>
+        pr.category.toLowerCase() === p.category.toLowerCase() &&
+        !usedIds.has(p.id),
+    );
+    if (!preset) return p;
+    usedIds.add(p.id);
+    return { ...p, promo: true, discount: preset.discount, promoTag: preset.tag };
+  });
+};
+
 const loadFromStorage = (): ManagedProduct[] => {
   if (typeof window === "undefined") return seed();
   try {
@@ -47,7 +62,7 @@ const loadFromStorage = (): ManagedProduct[] => {
     if (!raw) return seed();
     const parsed = JSON.parse(raw) as ManagedProduct[];
     if (!Array.isArray(parsed) || parsed.length === 0) return seed();
-    return parsed;
+    return ensurePromos(parsed);
   } catch {
     return seed();
   }

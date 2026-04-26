@@ -113,6 +113,14 @@ export const PromoHighlights = () => {
               <p className="text-sm text-muted-foreground line-clamp-2">
                 {hero.product.description}
               </p>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-3xl font-extrabold text-primary">
+                  {formatPrice(hero.product.price)}
+                </span>
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  à vista
+                </span>
+              </div>
               <Button
                 onClick={() => handleAdd(hero.product)}
                 size="lg"

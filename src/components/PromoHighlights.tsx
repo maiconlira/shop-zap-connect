@@ -8,6 +8,12 @@ import { useCart } from "@/hooks/useCart";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
+const formatPrice = (value: number) =>
+  value.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+
 type PromoItem = {
   product: Product;
   tag: string;

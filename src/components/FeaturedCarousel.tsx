@@ -62,12 +62,13 @@ const GROUPS: CarouselGroup[] = [
 
 type RowProps = {
   group: CarouselGroup;
-  items: Product[];
-  onAdd: (p: Product) => void;
+  items: ManagedProduct[];
+  onAdd: (p: ManagedProduct) => void;
   delay: number;
+  effectivePrice: (p: ManagedProduct) => number;
 };
 
-const CarouselRow = ({ group, items, onAdd, delay }: RowProps) => {
+const CarouselRow = ({ group, items, onAdd, delay, effectivePrice }: RowProps) => {
   const Icon = group.icon;
   return (
     <div className="space-y-6">

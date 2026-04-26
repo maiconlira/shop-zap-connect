@@ -10,7 +10,7 @@ export type ManagedProduct = Product & {
   promoTag?: string;
 };
 
-const STORAGE_KEY = "smartcell:products:v3";
+const STORAGE_KEY = "smartcell:products:v4";
 
 // Configuração inicial de promoções por categoria — pega 1 ou 2 produtos por categoria
 // e marca como promo com desconto e etiqueta. Pode ser editado/removido pelo admin depois.

@@ -25,6 +25,35 @@ const DEFAULT_TAGS = [
   "ÚLTIMAS UNIDADES",
 ];
 
+const FALLBACK_PROMOS = [
+  { category: "Capinhas", discount: 25, tag: "MAIS VENDIDO" },
+  { category: "Películas", discount: 30, tag: "OFERTA RELÂMPAGO" },
+  { category: "Áudio", discount: 20, tag: "SUPER OFERTA" },
+  { category: "Carregadores", discount: 15, tag: "FRETE GRÁTIS" },
+  { category: "Copos", discount: 18, tag: "QUEIMA DE ESTOQUE" },
+  { category: "Garrafas", discount: 22, tag: "EXCLUSIVO" },
+];
+
+const buildFallbackPromos = (products: ManagedProduct[]) => {
+  const used = new Set<string>();
+
+  return FALLBACK_PROMOS.map(({ category, discount, tag }) => {
+    const product = products.find(
+      (p) => p.category.toLowerCase() === category.toLowerCase() && !used.has(p.id),
+    );
+
+    if (!product) return null;
+    used.add(product.id);
+
+    return {
+      ...product,
+      promo: true,
+      discount: product.discount && product.discount > 0 ? product.discount : discount,
+      promoTag: product.promoTag?.trim() || tag,
+    };
+  }).filter((product): product is ManagedProduct => Boolean(product));
+};
+
 export const PromoHighlights = () => {
   const { add } = useCart();
   const { promos, effectivePrice } = useProducts();

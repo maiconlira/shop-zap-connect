@@ -165,7 +165,7 @@ const CarouselRow = ({ group, items, onAdd, delay, effectivePrice }: RowProps) =
 
 export const FeaturedCarousel = () => {
   const { add } = useCart();
-  const { products } = useProducts();
+  const { products, effectivePrice } = useProducts();
 
   const grouped = useMemo(
     () =>
@@ -175,8 +175,9 @@ export const FeaturedCarousel = () => {
     [products],
   );
 
-  const handleAdd = (product: Product) => {
-    add(product, 1);
+  const handleAdd = (product: ManagedProduct) => {
+    const finalPrice = product.promo ? effectivePrice(product) : product.price;
+    add({ ...product, price: finalPrice }, 1);
     toast.success("Adicionado ao carrinho", { description: product.name });
   };
 
@@ -208,6 +209,7 @@ export const FeaturedCarousel = () => {
               items={items}
               onAdd={handleAdd}
               delay={3500 + i * 700}
+              effectivePrice={effectivePrice}
             />
           ))}
         </div>

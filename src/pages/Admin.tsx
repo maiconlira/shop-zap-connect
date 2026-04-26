@@ -35,6 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ProductsProvider, useProducts, type ManagedProduct } from "@/hooks/useProducts";
+import { PromoManager } from "@/components/admin/PromoManager";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import {
   ArrowLeft,
@@ -370,6 +371,9 @@ const AdminInner = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Gerenciador de promoções */}
+        <PromoManager />
 
         {/* Toolbar */}
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">

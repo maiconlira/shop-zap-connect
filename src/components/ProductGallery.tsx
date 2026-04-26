@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { products, categories } from "@/data/products";
+import { useProducts } from "@/hooks/useProducts";
 import { phoneBrands, phoneModels } from "@/data/phones";
 import { cn } from "@/lib/utils";
 import { Search, Smartphone, X } from "lucide-react";
@@ -17,6 +17,7 @@ import { Search, Smartphone, X } from "lucide-react";
 const ALL = "todos";
 
 export const ProductGallery = () => {
+  const { products, categories } = useProducts();
   const [active, setActive] = useState("Todos");
   const [brand, setBrand] = useState<string>(ALL);
   const [modelId, setModelId] = useState<string>(ALL);
@@ -77,7 +78,7 @@ export const ProductGallery = () => {
     }
 
     return list;
-  }, [active, brand, modelId, query, phoneFilterActive]);
+  }, [active, brand, modelId, query, phoneFilterActive, products]);
 
   const clearPhoneFilter = () => {
     setBrand(ALL);

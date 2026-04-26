@@ -59,7 +59,28 @@ const buildFallbackPromos = (products: ManagedProduct[]): ManagedProduct[] => {
 
 export const PromoHighlights = () => {
   const { add } = useCart();
-  const { products, promos, effectivePrice } = useProducts();
+  const { products, promos, effectivePrice, updateProduct } = useProducts();
+  const seededRef = useRef(false);
+
+  // Se nenhum produto está marcado como promoção, persistimos as promoções
+  // padrão no estado para que apareçam no painel administrativo editáveis.
+  useEffect(() => {
+    if (seededRef.current) return;
+    if (promos.length > 0) return;
+    if (products.length === 0) return;
+
+    const fallback = buildFallbackPromos(products);
+    if (fallback.length === 0) return;
+
+    seededRef.current = true;
+    fallback.forEach((p) => {
+      updateProduct(p.id, {
+        promo: true,
+        discount: p.discount,
+        promoTag: p.promoTag,
+      });
+    });
+  }, [products, promos, updateProduct]);
 
   const promoProducts = useMemo(
     () => (promos.length > 0 ? promos : buildFallbackPromos(products)),

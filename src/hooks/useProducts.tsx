@@ -62,20 +62,6 @@ const persist = (list: ManagedProduct[]) => {
   }
 };
 
-type ProductsContextType = {
-  products: ManagedProduct[];
-  categories: string[];
-  promos: ManagedProduct[];
-  addProduct: (p: Omit<ManagedProduct, "id"> & { id?: string }) => ManagedProduct;
-  updateProduct: (id: string, patch: Partial<ManagedProduct>) => void;
-  deleteProduct: (id: string) => void;
-  resetToDefaults: () => void;
-  /** Retorna o preço final aplicando desconto se houver */
-  effectivePrice: (p: ManagedProduct) => number;
-};
-
-const ProductsContext = createContext<ProductsContextType | null>(null);
-
 export const ProductsProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<ManagedProduct[]>(() => loadFromStorage());
 

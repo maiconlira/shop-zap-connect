@@ -25,17 +25,54 @@ const DEFAULT_TAGS = [
   "ÚLTIMAS UNIDADES",
 ];
 
+const FALLBACK_PROMOS = [
+  { category: "Capinhas", discount: 25, tag: "MAIS VENDIDO" },
+  { category: "Películas", discount: 30, tag: "OFERTA RELÂMPAGO" },
+  { category: "Áudio", discount: 20, tag: "SUPER OFERTA" },
+  { category: "Carregadores", discount: 15, tag: "FRETE GRÁTIS" },
+  { category: "Copos", discount: 18, tag: "QUEIMA DE ESTOQUE" },
+  { category: "Garrafas", discount: 22, tag: "EXCLUSIVO" },
+];
+
+const buildFallbackPromos = (products: ManagedProduct[]): ManagedProduct[] => {
+  const used = new Set<string>();
+  const result: ManagedProduct[] = [];
+
+  FALLBACK_PROMOS.forEach(({ category, discount, tag }) => {
+    const product = products.find(
+      (p) => p.category.toLowerCase() === category.toLowerCase() && !used.has(p.id),
+    );
+
+    if (!product) return;
+
+    used.add(product.id);
+    result.push({
+      ...product,
+      promo: true,
+      discount: product.discount && product.discount > 0 ? product.discount : discount,
+      promoTag: product.promoTag?.trim() || tag,
+    });
+  });
+
+  return result;
+};
+
 export const PromoHighlights = () => {
   const { add } = useCart();
-  const { promos, effectivePrice } = useProducts();
+  const { products, promos, effectivePrice } = useProducts();
+
+  const promoProducts = useMemo(
+    () => (promos.length > 0 ? promos : buildFallbackPromos(products)),
+    [products, promos],
+  );
 
   const items = useMemo(
     () =>
-      promos.map((product, i) => ({
+      promoProducts.map((product, i) => ({
         product,
         tag: product.promoTag?.trim() || DEFAULT_TAGS[i % DEFAULT_TAGS.length],
       })),
-    [promos],
+    [promoProducts],
   );
 
   const handleAdd = (product: ManagedProduct) => {

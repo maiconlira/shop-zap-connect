@@ -20,6 +20,18 @@ import copo from "@/assets/produto-copo.jpg";
 import copoTermico from "@/assets/produto-copo-termico.jpg";
 import foneOver from "@/assets/produto-fone-over.jpg";
 import caixaSom2 from "@/assets/produto-caixa-som-2.jpg";
+import foneTwsBranco from "@/assets/produto-fone-tws-branco.jpg";
+import foneGamer from "@/assets/produto-fone-gamer.jpg";
+import foneSport from "@/assets/produto-fone-sport.jpg";
+import caixaMini from "@/assets/produto-caixa-mini.jpg";
+import caixaParty from "@/assets/produto-caixa-party.jpg";
+import caixaAprovaDagua from "@/assets/produto-caixa-aprova-dagua.jpg";
+import copoStanley from "@/assets/produto-copo-stanley.jpg";
+import copoVidro from "@/assets/produto-copo-vidro.jpg";
+import caneca from "@/assets/produto-caneca.jpg";
+import squeeze from "@/assets/produto-squeeze.jpg";
+import garrafaBambu from "@/assets/produto-garrafa-bambu.jpg";
+import garrafaKids from "@/assets/produto-garrafa-kids.jpg";
 
 // Variações visuais — alternadas entre os modelos para diversificar a galeria
 const caseVariants = [

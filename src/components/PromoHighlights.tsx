@@ -59,15 +59,20 @@ const buildFallbackPromos = (products: ManagedProduct[]): ManagedProduct[] => {
 
 export const PromoHighlights = () => {
   const { add } = useCart();
-  const { promos, effectivePrice } = useProducts();
+  const { products, promos, effectivePrice } = useProducts();
+
+  const promoProducts = useMemo(
+    () => (promos.length > 0 ? promos : buildFallbackPromos(products)),
+    [products, promos],
+  );
 
   const items = useMemo(
     () =>
-      promos.map((product, i) => ({
+      promoProducts.map((product, i) => ({
         product,
         tag: product.promoTag?.trim() || DEFAULT_TAGS[i % DEFAULT_TAGS.length],
       })),
-    [promos],
+    [promoProducts],
   );
 
   const handleAdd = (product: ManagedProduct) => {

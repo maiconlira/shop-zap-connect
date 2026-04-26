@@ -78,7 +78,7 @@ export const ProductGallery = () => {
     }
 
     return list;
-  }, [active, brand, modelId, query, phoneFilterActive]);
+  }, [active, brand, modelId, query, phoneFilterActive, products]);
 
   const clearPhoneFilter = () => {
     setBrand(ALL);

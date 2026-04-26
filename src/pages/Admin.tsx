@@ -34,8 +34,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useProducts, type ManagedProduct } from "@/hooks/useProducts";
-import { PromoManager } from "@/components/admin/PromoManager";
+import { ProductsProvider, useProducts, type ManagedProduct } from "@/hooks/useProducts";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import {
   ArrowLeft,
@@ -372,9 +371,6 @@ const AdminInner = () => {
           </Card>
         </div>
 
-        {/* Promoções da página principal */}
-        <PromoManager onEditProduct={setEditing} />
-
         {/* Toolbar */}
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
           <div className="relative flex-1">
@@ -562,7 +558,11 @@ const AdminInner = () => {
 const Admin = () => {
   const { authed } = useAdminAuth();
   if (!authed) return <Navigate to="/admin/login" replace />;
-  return <AdminInner />;
+  return (
+    <ProductsProvider>
+      <AdminInner />
+    </ProductsProvider>
+  );
 };
 
 export default Admin;

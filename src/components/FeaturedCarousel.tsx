@@ -10,12 +10,16 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, ShoppingCart, Headphones, Speaker, GlassWater } from "lucide-react";
+import { Sparkles, ShoppingCart, Headphones, Speaker, GlassWater, MessageCircle } from "lucide-react";
 import { useProducts, type ManagedProduct } from "@/hooks/useProducts";
 import type { Product } from "@/data/products";
 import { useCart } from "@/hooks/useCart";
 import { toast } from "sonner";
+import { whatsappLink, buildQuestionMessage } from "@/lib/whatsapp";
 import type { LucideIcon } from "lucide-react";
+
+const formatPrice = (value: number) =>
+  value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 type CarouselGroup = {
   id: string;

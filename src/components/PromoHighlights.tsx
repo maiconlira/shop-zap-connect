@@ -34,24 +34,27 @@ const FALLBACK_PROMOS = [
   { category: "Garrafas", discount: 22, tag: "EXCLUSIVO" },
 ];
 
-const buildFallbackPromos = (products: ManagedProduct[]) => {
+const buildFallbackPromos = (products: ManagedProduct[]): ManagedProduct[] => {
   const used = new Set<string>();
+  const result: ManagedProduct[] = [];
 
-  return FALLBACK_PROMOS.map(({ category, discount, tag }) => {
+  FALLBACK_PROMOS.forEach(({ category, discount, tag }) => {
     const product = products.find(
       (p) => p.category.toLowerCase() === category.toLowerCase() && !used.has(p.id),
     );
 
-    if (!product) return null;
-    used.add(product.id);
+    if (!product) return;
 
-    return {
+    used.add(product.id);
+    result.push({
       ...product,
       promo: true,
       discount: product.discount && product.discount > 0 ? product.discount : discount,
       promoTag: product.promoTag?.trim() || tag,
-    };
-  }).filter((product): product is ManagedProduct => Boolean(product));
+    });
+  });
+
+  return result;
 };
 
 export const PromoHighlights = () => {

@@ -2,18 +2,14 @@ import { useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Flame, ShoppingCart, Tag, Timer } from "lucide-react";
+import { Flame, ShoppingCart } from "lucide-react";
 import { products, type Product } from "@/data/products";
 import { useCart } from "@/hooks/useCart";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
-const formatBRL = (n: number) =>
-  n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-
 type PromoItem = {
   product: Product;
-  discount: number; // 0-1
   tag: string;
 };
 
@@ -29,7 +25,6 @@ const buildPromos = (): PromoItem[] => {
     "cabo-usbc",
     "capinha-galaxy-a55",
   ];
-  const discounts = [0.3, 0.25, 0.2, 0.35, 0.15, 0.4, 0.5, 0.22];
   const tags = [
     "MAIS VENDIDO",
     "OFERTA RELÂMPAGO",
@@ -45,7 +40,7 @@ const buildPromos = (): PromoItem[] => {
     .map((id, i) => {
       const product = products.find((p) => p.id === id);
       if (!product) return null;
-      return { product, discount: discounts[i], tag: tags[i] };
+      return { product, tag: tags[i] };
     })
     .filter((x): x is PromoItem => x !== null);
 };
@@ -62,8 +57,6 @@ export const PromoHighlights = () => {
   if (promos.length === 0) return null;
 
   const [hero, ...rest] = promos;
-  const heroOldPrice = hero.product.price;
-  const heroNewPrice = heroOldPrice * (1 - hero.discount);
 
   return (
     <section
@@ -111,17 +104,9 @@ export const PromoHighlights = () => {
               <h3 className="font-bold text-xl md:text-2xl leading-tight text-foreground">
                 {hero.product.name}
               </h3>
-              <div className="flex items-baseline gap-3 mt-2">
-                <span className="text-sm line-through text-muted-foreground">
-                  {formatBRL(heroOldPrice)}
-                </span>
-                <span className="text-3xl font-extrabold text-primary">
-                  {formatBRL(heroNewPrice)}
-                </span>
-                <span className="ml-auto text-xs font-bold text-primary">
-                  -{Math.round(hero.discount * 100)}%
-                </span>
-              </div>
+              <p className="text-sm text-muted-foreground line-clamp-2">
+                {hero.product.description}
+              </p>
               <Button
                 onClick={() => handleAdd(hero.product)}
                 size="lg"
@@ -129,66 +114,58 @@ export const PromoHighlights = () => {
                 className="mt-2 w-full font-bold"
               >
                 <ShoppingCart />
-                Garantir oferta
+                Quero esse
               </Button>
             </CardContent>
           </Card>
 
           {/* Grid de promos secundárias */}
           <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
-            {rest.map((promo, idx) => {
-              const newPrice = promo.product.price * (1 - promo.discount);
-              return (
-                <Card
-                  key={promo.product.id}
-                  className={cn(
-                    "group relative overflow-hidden border-border/40 bg-card shadow-card hover:shadow-elegant transition-smooth",
-                    idx === 0 && "sm:col-span-2",
-                  )}
-                >
-                  <div className="flex flex-row h-full">
-                    <div className="relative w-2/5 shrink-0 overflow-hidden bg-muted">
-                      <img
-                        src={promo.product.image}
-                        alt={promo.product.name}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                      <div className="absolute top-2 left-2">
-                        <Badge className="bg-primary text-primary-foreground hover:bg-primary text-[10px] font-extrabold px-2 py-0.5">
-                          -{Math.round(promo.discount * 100)}%
-                        </Badge>
-                      </div>
-                    </div>
-                    <CardContent className="flex-1 p-4 flex flex-col gap-2">
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-primary">
+            {rest.map((promo, idx) => (
+              <Card
+                key={promo.product.id}
+                className={cn(
+                  "group relative overflow-hidden border-border/40 bg-card shadow-card hover:shadow-elegant transition-smooth",
+                  idx === 0 && "sm:col-span-2",
+                )}
+              >
+                <div className="flex flex-row h-full">
+                  <div className="relative w-2/5 shrink-0 overflow-hidden bg-muted">
+                    <img
+                      src={promo.product.image}
+                      alt={promo.product.name}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute top-2 left-2">
+                      <Badge className="bg-primary text-primary-foreground hover:bg-primary text-[10px] font-extrabold px-2 py-0.5">
                         {promo.tag}
-                      </span>
-                      <h3 className="font-bold text-sm md:text-base leading-tight line-clamp-2">
-                        {promo.product.name}
-                      </h3>
-                      <div className="mt-auto">
-                        <div className="text-xs text-muted-foreground line-through">
-                          {formatBRL(promo.product.price)}
-                        </div>
-                        <div className="text-lg md:text-xl font-extrabold text-primary leading-none">
-                          {formatBRL(newPrice)}
-                        </div>
-                      </div>
-                      <Button
-                        onClick={() => handleAdd(promo.product)}
-                        variant="hero"
-                        size="sm"
-                        className="mt-2 w-full"
-                      >
-                        <ShoppingCart className="h-4 w-4" />
-                        Adicionar
-                      </Button>
-                    </CardContent>
+                      </Badge>
+                    </div>
                   </div>
-                </Card>
-              );
-            })}
+                  <CardContent className="flex-1 p-4 flex flex-col gap-2">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-primary">
+                      {promo.product.category}
+                    </span>
+                    <h3 className="font-bold text-sm md:text-base leading-tight line-clamp-2">
+                      {promo.product.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground line-clamp-2">
+                      {promo.product.description}
+                    </p>
+                    <Button
+                      onClick={() => handleAdd(promo.product)}
+                      variant="hero"
+                      size="sm"
+                      className="mt-auto w-full"
+                    >
+                      <ShoppingCart className="h-4 w-4" />
+                      Adicionar
+                    </Button>
+                  </CardContent>
+                </div>
+              </Card>
+            ))}
           </div>
         </div>
 

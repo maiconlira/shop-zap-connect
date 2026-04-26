@@ -9,9 +9,6 @@ import { whatsappLink, buildQuestionMessage } from "@/lib/whatsapp";
 
 type Props = { product: Product };
 
-const formatBRL = (n: number) =>
-  n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-
 export const ProductCard = ({ product }: Props) => {
   const { add } = useCart();
 
@@ -41,9 +38,6 @@ export const ProductCard = ({ product }: Props) => {
           <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
             {product.description}
           </p>
-        </div>
-        <div className="text-2xl font-extrabold text-primary">
-          {formatBRL(product.price)}
         </div>
         <div className="grid grid-cols-[1fr_auto] gap-2">
           <Button onClick={handleAdd} variant="hero" size="default">

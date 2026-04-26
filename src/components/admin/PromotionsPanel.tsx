@@ -62,7 +62,7 @@ const PromoCard = ({ product }: { product: ManagedProduct }) => {
               <span className="font-extrabold text-primary">
                 {formatPrice(finalPrice)}
               </span>
-              <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider inline-flex items-center gap-0.5">
+              <span className="text-[10px] font-bold text-primary uppercase tracking-wider inline-flex items-center gap-0.5">
                 <TrendingDown className="h-3 w-3" />
                 Economia {formatPrice(product.price - finalPrice)}
               </span>

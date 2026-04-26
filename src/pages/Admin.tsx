@@ -35,6 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ProductsProvider, useProducts, type ManagedProduct } from "@/hooks/useProducts";
+import { PromoManager } from "@/components/admin/PromoManager";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import {
   ArrowLeft,

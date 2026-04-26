@@ -2,18 +2,14 @@ import { useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Flame, ShoppingCart, Tag, Timer } from "lucide-react";
+import { Flame, ShoppingCart } from "lucide-react";
 import { products, type Product } from "@/data/products";
 import { useCart } from "@/hooks/useCart";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
-const formatBRL = (n: number) =>
-  n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-
 type PromoItem = {
   product: Product;
-  discount: number; // 0-1
   tag: string;
 };
 
@@ -29,7 +25,6 @@ const buildPromos = (): PromoItem[] => {
     "cabo-usbc",
     "capinha-galaxy-a55",
   ];
-  const discounts = [0.3, 0.25, 0.2, 0.35, 0.15, 0.4, 0.5, 0.22];
   const tags = [
     "MAIS VENDIDO",
     "OFERTA RELÂMPAGO",
@@ -45,7 +40,7 @@ const buildPromos = (): PromoItem[] => {
     .map((id, i) => {
       const product = products.find((p) => p.id === id);
       if (!product) return null;
-      return { product, discount: discounts[i], tag: tags[i] };
+      return { product, tag: tags[i] };
     })
     .filter((x): x is PromoItem => x !== null);
 };
@@ -62,8 +57,6 @@ export const PromoHighlights = () => {
   if (promos.length === 0) return null;
 
   const [hero, ...rest] = promos;
-  const heroOldPrice = hero.product.price;
-  const heroNewPrice = heroOldPrice * (1 - hero.discount);
 
   return (
     <section

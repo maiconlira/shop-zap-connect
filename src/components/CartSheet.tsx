@@ -12,11 +12,8 @@ import { useCart } from "@/hooks/useCart";
 import { buildOrderMessage, whatsappLink } from "@/lib/whatsapp";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const formatBRL = (n: number) =>
-  n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-
 export const CartSheet = () => {
-  const { items, count, total, setQty, remove } = useCart();
+  const { items, count, setQty, remove } = useCart();
 
   const handleReserve = () => {
     if (items.length === 0) return;
@@ -68,8 +65,8 @@ export const CartSheet = () => {
                     <p className="font-semibold text-sm leading-tight truncate">
                       {product.name}
                     </p>
-                    <p className="text-primary font-bold mt-1">
-                      {formatBRL(product.price)}
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {product.category}
                     </p>
                     <div className="flex items-center gap-2 mt-2">
                       <Button
@@ -112,9 +109,12 @@ export const CartSheet = () => {
 
         <div className="border-t border-border pt-4 space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">Total</span>
-            <span className="text-2xl font-extrabold">{formatBRL(total)}</span>
+            <span className="text-muted-foreground">Itens</span>
+            <span className="text-2xl font-extrabold">{count}</span>
           </div>
+          <p className="text-xs text-muted-foreground">
+            Os valores e formas de pagamento serão confirmados pelo WhatsApp.
+          </p>
           <Button
             variant="whatsapp"
             size="lg"

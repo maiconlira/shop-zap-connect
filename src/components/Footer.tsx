@@ -63,8 +63,10 @@ export const Footer = () => (
       </div>
     </div>
     <div className="border-t border-secondary-foreground/10">
-      <div className="container py-4 text-xs text-secondary-foreground/60 text-center">
-        © {new Date().getFullYear()} SmartCell Assistência Técnica. Todos os direitos reservados.
+      <div className="container py-4 text-xs text-secondary-foreground/60 flex flex-col sm:flex-row items-center justify-center gap-2 text-center">
+        <span>© {new Date().getFullYear()} SmartCell Assistência Técnica. Todos os direitos reservados.</span>
+        <span className="hidden sm:inline">·</span>
+        <a href="/admin/login" className="hover:text-primary transition-smooth">Admin</a>
       </div>
     </div>
   </footer>

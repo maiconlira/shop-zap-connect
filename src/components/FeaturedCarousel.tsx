@@ -47,7 +47,7 @@ const GROUPS: CarouselGroup[] = [
   },
   {
     id: "copos",
-    title: "",
+    title: "Nossos",
     highlight: "Copos",
     description: "Drinkware estiloso para água, café e bebidas geladas.",
     icon: Coffee,
@@ -55,7 +55,7 @@ const GROUPS: CarouselGroup[] = [
   },
   {
     id: "garrafas",
-    title: "",
+    title: "Nossas",
     highlight: "Garrafas",
     description: "Mantêm a temperatura por horas — perfeitas para qualquer rotina.",
     icon: Droplet,

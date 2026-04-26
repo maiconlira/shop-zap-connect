@@ -374,164 +374,188 @@ const AdminInner = () => {
           </Card>
         </div>
 
-        {/* Toolbar */}
-        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar produto..."
-              className="pl-9"
-            />
-          </div>
-          <div className="flex gap-2 overflow-x-auto pb-1">
-            {categories.map((c) => (
-              <Button
-                key={c}
-                size="sm"
-                variant={categoryFilter === c ? "default" : "outline"}
-                onClick={() => setCategoryFilter(c)}
-                className="rounded-full shrink-0"
-              >
-                {c}
-              </Button>
-            ))}
-          </div>
-          <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-            <DialogTrigger asChild>
-              <Button variant="hero">
-                <Plus className="h-4 w-4" />
-                Novo produto
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Adicionar novo produto</DialogTitle>
-              </DialogHeader>
-              <ProductForm
-                initial={emptyDraft}
-                submitLabel="Criar produto"
-                categories={categories}
-                onSubmit={(data) => {
-                  addProduct(data);
-                  setCreateOpen(false);
-                  toast.success("Produto criado", { description: data.name });
-                }}
-              />
-            </DialogContent>
-          </Dialog>
-        </div>
+        <Tabs defaultValue="products" className="space-y-6">
+          <TabsList>
+            <TabsTrigger value="products" className="gap-2">
+              <LayoutGrid className="h-4 w-4" />
+              Produtos
+            </TabsTrigger>
+            <TabsTrigger value="promos" className="gap-2">
+              <Flame className="h-4 w-4" />
+              Promoções
+              {stats.promos > 0 && (
+                <Badge className="ml-1 bg-primary text-primary-foreground hover:bg-primary px-1.5 py-0 text-[10px]">
+                  {stats.promos}
+                </Badge>
+              )}
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Table */}
-        <Card>
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[80px]">Imagem</TableHead>
-                    <TableHead>Produto</TableHead>
-                    <TableHead>Categoria</TableHead>
-                    <TableHead>Preço</TableHead>
-                    <TableHead>Promoção</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filtered.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={6} className="text-center py-12 text-muted-foreground">
-                        Nenhum produto encontrado.
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    filtered.map((p) => {
-                      const finalPrice = effectivePrice(p);
-                      return (
-                        <TableRow key={p.id}>
-                          <TableCell>
-                            <div className="h-12 w-12 rounded-md overflow-hidden bg-muted">
-                              <img src={p.image} alt={p.name} className="h-full w-full object-cover" />
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <p className="font-semibold line-clamp-1">{p.name}</p>
-                            <p className="text-xs text-muted-foreground line-clamp-1">
-                              {p.description}
-                            </p>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="secondary">{p.category}</Badge>
-                          </TableCell>
-                          <TableCell>
-                            {p.promo && p.discount ? (
-                              <div className="space-y-0.5">
-                                <p className="text-sm line-through text-muted-foreground">
-                                  {formatPrice(p.price)}
-                                </p>
-                                <p className="font-bold text-primary">{formatPrice(finalPrice)}</p>
-                              </div>
-                            ) : (
-                              <p className="font-semibold">{formatPrice(p.price)}</p>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {p.promo ? (
-                              <Badge className="bg-primary text-primary-foreground hover:bg-primary">
-                                <Flame className="h-3 w-3 mr-1" />
-                                {p.discount}% OFF
-                              </Badge>
-                            ) : (
-                              <span className="text-xs text-muted-foreground">—</span>
-                            )}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <div className="flex justify-end gap-1">
-                              <Button
-                                size="icon"
-                                variant="ghost"
-                                onClick={() => setEditing(p)}
-                              >
-                                <Pencil className="h-4 w-4" />
-                              </Button>
-                              <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                  <Button size="icon" variant="ghost" className="text-destructive">
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                  <AlertDialogHeader>
-                                    <AlertDialogTitle>Excluir produto?</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                      Esta ação remove <strong>{p.name}</strong> do catálogo.
-                                    </AlertDialogDescription>
-                                  </AlertDialogHeader>
-                                  <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                    <AlertDialogAction
-                                      onClick={() => {
-                                        deleteProduct(p.id);
-                                        toast.success("Produto excluído");
-                                      }}
-                                    >
-                                      Excluir
-                                    </AlertDialogAction>
-                                  </AlertDialogFooter>
-                                </AlertDialogContent>
-                              </AlertDialog>
-                            </div>
+          <TabsContent value="products" className="space-y-6 mt-0">
+            {/* Toolbar */}
+            <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Buscar produto..."
+                  className="pl-9"
+                />
+              </div>
+              <div className="flex gap-2 overflow-x-auto pb-1">
+                {categories.map((c) => (
+                  <Button
+                    key={c}
+                    size="sm"
+                    variant={categoryFilter === c ? "default" : "outline"}
+                    onClick={() => setCategoryFilter(c)}
+                    className="rounded-full shrink-0"
+                  >
+                    {c}
+                  </Button>
+                ))}
+              </div>
+              <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="hero">
+                    <Plus className="h-4 w-4" />
+                    Novo produto
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>Adicionar novo produto</DialogTitle>
+                  </DialogHeader>
+                  <ProductForm
+                    initial={emptyDraft}
+                    submitLabel="Criar produto"
+                    categories={categories}
+                    onSubmit={(data) => {
+                      addProduct(data);
+                      setCreateOpen(false);
+                      toast.success("Produto criado", { description: data.name });
+                    }}
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            {/* Table */}
+            <Card>
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-[80px]">Imagem</TableHead>
+                        <TableHead>Produto</TableHead>
+                        <TableHead>Categoria</TableHead>
+                        <TableHead>Preço</TableHead>
+                        <TableHead>Promoção</TableHead>
+                        <TableHead className="text-right">Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filtered.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={6} className="text-center py-12 text-muted-foreground">
+                            Nenhum produto encontrado.
                           </TableCell>
                         </TableRow>
-                      );
-                    })
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
+                      ) : (
+                        filtered.map((p) => {
+                          const finalPrice = effectivePrice(p);
+                          return (
+                            <TableRow key={p.id}>
+                              <TableCell>
+                                <div className="h-12 w-12 rounded-md overflow-hidden bg-muted">
+                                  <img src={p.image} alt={p.name} className="h-full w-full object-cover" />
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <p className="font-semibold line-clamp-1">{p.name}</p>
+                                <p className="text-xs text-muted-foreground line-clamp-1">
+                                  {p.description}
+                                </p>
+                              </TableCell>
+                              <TableCell>
+                                <Badge variant="secondary">{p.category}</Badge>
+                              </TableCell>
+                              <TableCell>
+                                {p.promo && p.discount ? (
+                                  <div className="space-y-0.5">
+                                    <p className="text-sm line-through text-muted-foreground">
+                                      {formatPrice(p.price)}
+                                    </p>
+                                    <p className="font-bold text-primary">{formatPrice(finalPrice)}</p>
+                                  </div>
+                                ) : (
+                                  <p className="font-semibold">{formatPrice(p.price)}</p>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                {p.promo ? (
+                                  <Badge className="bg-primary text-primary-foreground hover:bg-primary">
+                                    <Flame className="h-3 w-3 mr-1" />
+                                    {p.discount}% OFF
+                                  </Badge>
+                                ) : (
+                                  <span className="text-xs text-muted-foreground">—</span>
+                                )}
+                              </TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex justify-end gap-1">
+                                  <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    onClick={() => setEditing(p)}
+                                  >
+                                    <Pencil className="h-4 w-4" />
+                                  </Button>
+                                  <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                      <Button size="icon" variant="ghost" className="text-destructive">
+                                        <Trash2 className="h-4 w-4" />
+                                      </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                      <AlertDialogHeader>
+                                        <AlertDialogTitle>Excluir produto?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                          Esta ação remove <strong>{p.name}</strong> do catálogo.
+                                        </AlertDialogDescription>
+                                      </AlertDialogHeader>
+                                      <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                        <AlertDialogAction
+                                          onClick={() => {
+                                            deleteProduct(p.id);
+                                            toast.success("Produto excluído");
+                                          }}
+                                        >
+                                          Excluir
+                                        </AlertDialogAction>
+                                      </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                  </AlertDialog>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="promos" className="mt-0">
+            <PromotionsPanel />
+          </TabsContent>
+        </Tabs>
       </main>
 
       {/* Edit dialog */}

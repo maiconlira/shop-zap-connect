@@ -10,7 +10,7 @@ export type ManagedProduct = Product & {
   promoTag?: string;
 };
 
-const STORAGE_KEY = "smartcell:products:v3";
+const STORAGE_KEY = "smartcell:products:v4";
 
 // Configuração inicial de promoções por categoria — pega 1 ou 2 produtos por categoria
 // e marca como promo com desconto e etiqueta. Pode ser editado/removido pelo admin depois.
@@ -42,15 +42,13 @@ const seed = (): ManagedProduct[] => {
 
 const ensurePromos = (list: ManagedProduct[]): ManagedProduct[] => {
   if (list.some((p) => p.promo)) return list;
-  const usedIds = new Set<string>();
+  const usedCategories = new Set<string>();
   return list.map((p) => {
-    const preset = PROMO_PRESETS.find(
-      (pr) =>
-        pr.category.toLowerCase() === p.category.toLowerCase() &&
-        !usedIds.has(p.id),
-    );
+    const cat = p.category.toLowerCase();
+    if (usedCategories.has(cat)) return p;
+    const preset = PROMO_PRESETS.find((pr) => pr.category.toLowerCase() === cat);
     if (!preset) return p;
-    usedIds.add(p.id);
+    usedCategories.add(cat);
     return { ...p, promo: true, discount: preset.discount, promoTag: preset.tag };
   });
 };

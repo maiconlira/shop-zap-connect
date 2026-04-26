@@ -12,7 +12,33 @@ export type ManagedProduct = Product & {
 
 const STORAGE_KEY = "smartcell:products:v1";
 
-const seed = (): ManagedProduct[] => defaultProducts.map((p) => ({ ...p }));
+// Configuração inicial de promoções por categoria — pega 1 ou 2 produtos por categoria
+// e marca como promo com desconto e etiqueta. Pode ser editado/removido pelo admin depois.
+const PROMO_PRESETS: Array<{ category: string; discount: number; tag: string }> = [
+  { category: "Capinhas", discount: 25, tag: "MAIS VENDIDO" },
+  { category: "Películas", discount: 30, tag: "OFERTA RELÂMPAGO" },
+  { category: "Áudio", discount: 20, tag: "SUPER OFERTA" },
+  { category: "Carregadores", discount: 15, tag: "FRETE GRÁTIS" },
+  { category: "Copos", discount: 18, tag: "QUEIMA DE ESTOQUE" },
+  { category: "Garrafas", discount: 22, tag: "EXCLUSIVO" },
+];
+
+const seed = (): ManagedProduct[] => {
+  const list = defaultProducts.map((p) => ({ ...p }) as ManagedProduct);
+  const usedIds = new Set<string>();
+  PROMO_PRESETS.forEach(({ category, discount, tag }) => {
+    const candidate = list.find(
+      (p) => p.category.toLowerCase() === category.toLowerCase() && !usedIds.has(p.id),
+    );
+    if (candidate) {
+      candidate.promo = true;
+      candidate.discount = discount;
+      candidate.promoTag = tag;
+      usedIds.add(candidate.id);
+    }
+  });
+  return list;
+};
 
 const loadFromStorage = (): ManagedProduct[] => {
   if (typeof window === "undefined") return seed();

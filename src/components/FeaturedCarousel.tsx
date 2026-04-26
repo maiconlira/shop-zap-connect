@@ -11,7 +11,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, ShoppingCart, Headphones, Speaker, GlassWater } from "lucide-react";
-import { products, type Product } from "@/data/products";
+import { useProducts, type ManagedProduct } from "@/hooks/useProducts";
+import type { Product } from "@/data/products";
 import { useCart } from "@/hooks/useCart";
 import { toast } from "sonner";
 import type { LucideIcon } from "lucide-react";
@@ -134,13 +135,14 @@ const CarouselRow = ({ group, items, onAdd, delay }: RowProps) => {
 
 export const FeaturedCarousel = () => {
   const { add } = useCart();
+  const { products } = useProducts();
 
   const grouped = useMemo(
     () =>
       GROUPS.map((g) => ({ group: g, items: products.filter(g.filter) })).filter(
         (g) => g.items.length > 0,
       ),
-    [],
+    [products],
   );
 
   const handleAdd = (product: Product) => {

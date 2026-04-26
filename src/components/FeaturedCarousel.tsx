@@ -117,15 +117,40 @@ const CarouselRow = ({ group, items, onAdd, delay, effectivePrice }: RowProps) =
                   <p className="text-sm text-muted-foreground line-clamp-2 flex-1">
                     {product.description}
                   </p>
-                  <Button
-                    onClick={() => onAdd(product)}
-                    variant="hero"
-                    size="default"
-                    className="w-full"
-                  >
-                    <ShoppingCart />
-                    Adicionar
-                  </Button>
+                  {product.promo ? (
+                    <>
+                      <div className="flex items-baseline gap-2">
+                        {product.discount && product.discount > 0 && (
+                          <span className="text-sm text-muted-foreground line-through">
+                            {formatPrice(product.price)}
+                          </span>
+                        )}
+                        <span className="text-lg font-extrabold text-primary">
+                          {formatPrice(effectivePrice(product))}
+                        </span>
+                      </div>
+                      <Button
+                        onClick={() => onAdd(product)}
+                        variant="hero"
+                        size="default"
+                        className="w-full"
+                      >
+                        <ShoppingCart />
+                        Adicionar
+                      </Button>
+                    </>
+                  ) : (
+                    <Button asChild variant="hero" size="default" className="w-full">
+                      <a
+                        href={whatsappLink(buildQuestionMessage(product.name))}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <MessageCircle />
+                        Consultar no WhatsApp
+                      </a>
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             </CarouselItem>

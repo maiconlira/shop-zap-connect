@@ -372,8 +372,8 @@ const AdminInner = () => {
           </Card>
         </div>
 
-        {/* Gerenciador de promoções */}
-        <PromoManager />
+        {/* Promoções da página principal */}
+        <PromoManager onEditProduct={setEditing} />
 
         {/* Toolbar */}
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">

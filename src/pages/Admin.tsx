@@ -38,10 +38,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useProducts, type ManagedProduct } from "@/hooks/useProducts";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { PromotionsPanel } from "@/components/admin/PromotionsPanel";
+import { apiUploadImage } from "@/lib/api";
 import {
   ArrowLeft,
+  CloudUpload,
+  Database,
   Flame,
   LayoutGrid,
+  Loader2,
   LogOut,
   Pencil,
   Plus,
@@ -201,10 +205,15 @@ const ProductForm = ({
             <Button
               type="button"
               variant="outline"
+              disabled={uploading}
               onClick={() => fileRef.current?.click()}
             >
-              <Upload className="h-4 w-4" />
-              Upload
+              {uploading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Upload className="h-4 w-4" />
+              )}
+              {uploading ? "Enviando..." : "Upload"}
             </Button>
             <input
               ref={fileRef}
@@ -218,6 +227,11 @@ const ProductForm = ({
               }}
             />
           </div>
+          <p className="text-xs text-muted-foreground">
+            {apiOn
+              ? "Banco conectado: imagens de até 25 MB, salvas no servidor."
+              : "Modo local: imagens de até ~1.5 MB."}
+          </p>
           {draft.image && (
             <div className="mt-2 h-32 w-32 rounded-lg overflow-hidden border border-border bg-muted">
               <img src={draft.image} alt="Pré-visualização" className="h-full w-full object-cover" />
@@ -288,7 +302,7 @@ const ProductForm = ({
 };
 
 const AdminInner = () => {
-  const { products, categories, addProduct, updateProduct, deleteProduct, resetToDefaults, effectivePrice } =
+  const { products, categories, addProduct, updateProduct, deleteProduct, resetToDefaults, effectivePrice, apiOn, serverEmpty, syncToServer } =
     useProducts();
   const { logout } = useAdminAuth();
 

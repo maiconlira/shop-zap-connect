@@ -17,10 +17,10 @@ const AdminLogin = () => {
 
   if (authed) return <Navigate to="/admin" replace />;
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const ok = login(user, pass);
+    const ok = await login(user, pass);
     setLoading(false);
     if (ok) {
       toast.success("Bem-vindo ao painel");

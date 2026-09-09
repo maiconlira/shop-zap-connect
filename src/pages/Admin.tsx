@@ -38,10 +38,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useProducts, type ManagedProduct } from "@/hooks/useProducts";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { PromotionsPanel } from "@/components/admin/PromotionsPanel";
+import { apiUploadImage } from "@/lib/api";
 import {
   ArrowLeft,
+  CloudUpload,
+  Database,
   Flame,
   LayoutGrid,
+  Loader2,
   LogOut,
   Pencil,
   Plus,
@@ -66,6 +70,9 @@ const emptyDraft: Omit<ManagedProduct, "id"> = {
   promoTag: "",
 };
 
+const MAX_LOCAL_IMAGE = 1.5 * 1024 * 1024; // modo local (localStorage)
+const MAX_SERVER_IMAGE = 25 * 1024 * 1024; // modo banco de dados (servidor)
+
 const ProductForm = ({
   initial,
   onSubmit,
@@ -78,12 +85,37 @@ const ProductForm = ({
   categories: string[];
 }) => {
   const [draft, setDraft] = useState<Omit<ManagedProduct, "id">>(initial);
+  const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const { apiOn } = useProducts();
 
-  const handleFile = (file: File) => {
-    if (file.size > 1.5 * 1024 * 1024) {
+  const handleFile = async (file: File) => {
+    if (apiOn) {
+      // Banco conectado: envia a imagem para o servidor (até 25 MB)
+      if (file.size > MAX_SERVER_IMAGE) {
+        toast.error("Imagem muito grande", {
+          description: "Use imagens com até 25 MB.",
+        });
+        return;
+      }
+      setUploading(true);
+      try {
+        const url = await apiUploadImage(file);
+        setDraft((d) => ({ ...d, image: url }));
+        toast.success("Imagem enviada para o servidor");
+      } catch (err) {
+        toast.error("Falha no upload", {
+          description: err instanceof Error ? err.message : "Tente novamente",
+        });
+      } finally {
+        setUploading(false);
+      }
+      return;
+    }
+    // Modo local: imagem embutida, limite menor
+    if (file.size > MAX_LOCAL_IMAGE) {
       toast.error("Imagem muito grande", {
-        description: "Use imagens com até ~1.5MB para evitar lentidão.",
+        description: "No modo local, use imagens com até ~1.5 MB.",
       });
       return;
     }
@@ -173,10 +205,15 @@ const ProductForm = ({
             <Button
               type="button"
               variant="outline"
+              disabled={uploading}
               onClick={() => fileRef.current?.click()}
             >
-              <Upload className="h-4 w-4" />
-              Upload
+              {uploading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Upload className="h-4 w-4" />
+              )}
+              {uploading ? "Enviando..." : "Upload"}
             </Button>
             <input
               ref={fileRef}
@@ -190,6 +227,11 @@ const ProductForm = ({
               }}
             />
           </div>
+          <p className="text-xs text-muted-foreground">
+            {apiOn
+              ? "Banco conectado: imagens de até 25 MB, salvas no servidor."
+              : "Modo local: imagens de até ~1.5 MB."}
+          </p>
           {draft.image && (
             <div className="mt-2 h-32 w-32 rounded-lg overflow-hidden border border-border bg-muted">
               <img src={draft.image} alt="Pré-visualização" className="h-full w-full object-cover" />
@@ -260,7 +302,7 @@ const ProductForm = ({
 };
 
 const AdminInner = () => {
-  const { products, categories, addProduct, updateProduct, deleteProduct, resetToDefaults, effectivePrice } =
+  const { products, categories, addProduct, updateProduct, deleteProduct, resetToDefaults, effectivePrice, apiOn, serverEmpty, syncToServer } =
     useProducts();
   const { logout } = useAdminAuth();
 

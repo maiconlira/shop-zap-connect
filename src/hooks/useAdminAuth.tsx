@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
+import { apiLogin, getToken, setToken } from "@/lib/api";
 
-const SESSION_KEY = "smartcell:admin:session";
+// Credenciais de fallback quando a API não está disponível (modo local)
 const ADMIN_USER = "smartcell";
 const ADMIN_PASS = "smart123";
+const LOCAL_TOKEN = "local-mode";
 
-const isAuthed = () => {
-  if (typeof window === "undefined") return false;
-  return window.sessionStorage.getItem(SESSION_KEY) === "1";
-};
+const isAuthed = () => !!getToken();
 
 export const useAdminAuth = () => {
   const [authed, setAuthed] = useState<boolean>(() => isAuthed());
@@ -18,17 +17,29 @@ export const useAdminAuth = () => {
     return () => window.removeEventListener("storage", onStorage);
   }, []);
 
-  const login = useCallback((user: string, pass: string) => {
-    if (user.trim() === ADMIN_USER && pass === ADMIN_PASS) {
-      window.sessionStorage.setItem(SESSION_KEY, "1");
+  const login = useCallback(async (user: string, pass: string) => {
+    // Tenta autenticar no servidor (banco de dados da hospedagem)
+    try {
+      const token = await apiLogin(user.trim(), pass);
+      setToken(token);
       setAuthed(true);
       return true;
+    } catch (err) {
+      const status = (err as Error & { status?: number }).status;
+      // 401 = credenciais erradas no servidor — não tenta fallback
+      if (status === 401) return false;
+      // API indisponível (preview/local): modo local
+      if (user.trim() === ADMIN_USER && pass === ADMIN_PASS) {
+        setToken(LOCAL_TOKEN);
+        setAuthed(true);
+        return true;
+      }
+      return false;
     }
-    return false;
   }, []);
 
   const logout = useCallback(() => {
-    window.sessionStorage.removeItem(SESSION_KEY);
+    setToken(null);
     setAuthed(false);
   }, []);
 

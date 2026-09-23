@@ -71,7 +71,6 @@ const emptyDraft: Omit<ManagedProduct, "id"> = {
 };
 
 const MAX_LOCAL_IMAGE = 1.5 * 1024 * 1024; // modo local (localStorage)
-const MAX_SERVER_IMAGE = 25 * 1024 * 1024; // modo banco de dados (servidor)
 
 const ProductForm = ({
   initial,
@@ -91,13 +90,7 @@ const ProductForm = ({
 
   const handleFile = async (file: File) => {
     if (apiOn) {
-      // Banco conectado: envia a imagem para o servidor (até 25 MB)
-      if (file.size > MAX_SERVER_IMAGE) {
-        toast.error("Imagem muito grande", {
-          description: "Use imagens com até 25 MB.",
-        });
-        return;
-      }
+      // Banco conectado: envia a imagem para o servidor (sem limite de tamanho)
       setUploading(true);
       try {
         const url = await apiUploadImage(file);

@@ -13,8 +13,9 @@ define('DB_PASS', 'TROQUE_ESTA_SENHA');         // senha do banco
 define('ADMIN_USER', 'smartcell');
 define('ADMIN_PASS', 'smart123');
 
-// Tamanho máximo de upload de imagem (25 MB)
-define('MAX_UPLOAD_BYTES', 25 * 1024 * 1024);
+// Tamanho máximo de upload de imagem (0 = sem limite; o limite real
+// fica a cargo das configurações do PHP no servidor)
+define('MAX_UPLOAD_BYTES', 0);
 
 header('Content-Type: application/json; charset=utf-8');
 

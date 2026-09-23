@@ -1,0 +1,44 @@
+============================================================
+ COMO ATIVAR O BANCO DE DADOS (HOSTINGER) — SMARTCELL
+============================================================
+
+Isso remove o limite de 1,5 MB nas fotos e faz os produtos
+do painel admin ficarem salvos no servidor (visíveis para
+todos os visitantes, em qualquer dispositivo).
+
+PASSO 1 — Criar o banco de dados
+  1. Acesse o hPanel da Hostinger
+  2. Vá em "Bancos de Dados" → "Bancos de Dados MySQL"
+  3. Crie um banco novo (ex.: smartcell) e anote:
+     - Nome do banco
+     - Usuário do banco
+     - Senha do banco
+
+PASSO 2 — Configurar o arquivo config.php
+  1. No hPanel, abra "Arquivos" → "Gerenciador de Arquivos"
+  2. Vá até public_html/api/config.php e clique em Editar
+  3. Troque as 4 linhas do topo pelos dados anotados:
+
+     define('DB_HOST', 'localhost');
+     define('DB_NAME', 'u123456789_smartcell');  <- seu banco
+     define('DB_USER', 'u123456789_smartcell');  <- seu usuário
+     define('DB_PASS', 'sua_senha_aqui');        <- sua senha
+
+  4. Salve o arquivo.
+
+PASSO 3 — Testar
+  1. Abra seusite.com/admin e entre com smartcell / smart123
+  2. No topo do painel deve aparecer o selo verde
+     "Banco conectado".
+  3. Se o banco estiver vazio, aparecerá o botão
+     "Enviar catálogo ao servidor" — clique nele uma vez
+     para copiar todos os produtos atuais para o banco.
+
+PRONTO!
+ - Uploads de imagem passam a valer sem limite de tamanho
+   (as fotos ficam na pasta /uploads do servidor).
+ - Produtos criados/editados no admin valem para todos os
+   visitantes do site.
+
+Se aparecer "Modo local": revise o PASSO 2 (dados do banco).
+============================================================

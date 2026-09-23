@@ -70,7 +70,32 @@ const emptyDraft: Omit<ManagedProduct, "id"> = {
   promoTag: "",
 };
 
-const MAX_LOCAL_IMAGE = 1.5 * 1024 * 1024; // modo local (localStorage)
+// Redimensiona e comprime qualquer imagem (sem limite de tamanho de entrada)
+const compressImage = (file: File, maxSide = 1600, quality = 0.85): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return reject(new Error("canvas"));
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/jpeg", quality));
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("load"));
+    };
+    img.src = url;
+  });
 
 const ProductForm = ({
   initial,
@@ -105,20 +130,17 @@ const ProductForm = ({
       }
       return;
     }
-    // Modo local: imagem embutida, limite menor
-    if (file.size > MAX_LOCAL_IMAGE) {
-      toast.error("Imagem muito grande", {
-        description: "No modo local, use imagens com até ~1.5 MB.",
-      });
-      return;
+    // Modo local: aceita qualquer tamanho e otimiza automaticamente
+    setUploading(true);
+    try {
+      const dataUrl = await compressImage(file);
+      setDraft((d) => ({ ...d, image: dataUrl }));
+      toast.success("Imagem carregada e otimizada");
+    } catch {
+      toast.error("Não foi possível ler a imagem");
+    } finally {
+      setUploading(false);
     }
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        setDraft((d) => ({ ...d, image: reader.result as string }));
-      }
-    };
-    reader.readAsDataURL(file);
   };
 
   const handleSubmit = (e: FormEvent) => {

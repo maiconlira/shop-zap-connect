@@ -245,7 +245,7 @@ const ProductForm = ({
           <p className="text-xs text-muted-foreground">
             {apiOn
               ? "Banco conectado: imagens salvas no servidor, sem limite de tamanho."
-              : "Modo local: imagens de até ~1.5 MB."}
+              : "Qualquer tamanho — a imagem é otimizada automaticamente."}
           </p>
           {draft.image && (
             <div className="mt-2 h-32 w-32 rounded-lg overflow-hidden border border-border bg-muted">

@@ -336,8 +336,43 @@ const AdminInner = () => {
               <h1 className="font-extrabold text-lg leading-none">Painel Admin</h1>
               <p className="text-xs text-muted-foreground">SmartCell — Gestão de produtos</p>
             </div>
+            <Badge
+              variant="outline"
+              className={
+                apiOn
+                  ? "gap-1.5 border-green-500/40 text-green-600"
+                  : "gap-1.5 border-amber-500/40 text-amber-600"
+              }
+              title={
+                apiOn
+                  ? "Produtos e imagens salvos no banco de dados da hospedagem"
+                  : "Banco não configurado — alterações ficam só neste navegador"
+              }
+            >
+              <Database className="h-3 w-3" />
+              {apiOn ? "Banco conectado" : "Modo local"}
+            </Badge>
           </div>
           <div className="flex items-center gap-2">
+            {apiOn && serverEmpty && (
+              <Button
+                variant="hero"
+                size="sm"
+                onClick={async () => {
+                  try {
+                    await syncToServer();
+                    toast.success("Catálogo enviado para o servidor");
+                  } catch {
+                    toast.error("Falha ao sincronizar", {
+                      description: "Verifique a configuração do banco.",
+                    });
+                  }
+                }}
+              >
+                <CloudUpload className="h-4 w-4" />
+                <span className="hidden sm:inline">Enviar catálogo ao servidor</span>
+              </Button>
+            )}
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="outline" size="sm">

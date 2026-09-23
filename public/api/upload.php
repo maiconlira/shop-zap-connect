@@ -13,8 +13,8 @@ if ($f['error'] !== UPLOAD_ERR_OK) {
     json_out(['error' => 'Falha no upload (código ' . $f['error'] . ')'], 400);
 }
 
-if ($f['size'] > MAX_UPLOAD_BYTES) {
-    json_out(['error' => 'Imagem excede o limite de 25 MB'], 400);
+if (MAX_UPLOAD_BYTES > 0 && $f['size'] > MAX_UPLOAD_BYTES) {
+    json_out(['error' => 'Imagem excede o limite permitido'], 400);
 }
 
 // Valida que é uma imagem de verdade

@@ -71,7 +71,6 @@ const emptyDraft: Omit<ManagedProduct, "id"> = {
 };
 
 const MAX_LOCAL_IMAGE = 1.5 * 1024 * 1024; // modo local (localStorage)
-const MAX_SERVER_IMAGE = 25 * 1024 * 1024; // modo banco de dados (servidor)
 
 const ProductForm = ({
   initial,
@@ -91,13 +90,7 @@ const ProductForm = ({
 
   const handleFile = async (file: File) => {
     if (apiOn) {
-      // Banco conectado: envia a imagem para o servidor (até 25 MB)
-      if (file.size > MAX_SERVER_IMAGE) {
-        toast.error("Imagem muito grande", {
-          description: "Use imagens com até 25 MB.",
-        });
-        return;
-      }
+      // Banco conectado: envia a imagem para o servidor (sem limite de tamanho)
       setUploading(true);
       try {
         const url = await apiUploadImage(file);
@@ -229,7 +222,7 @@ const ProductForm = ({
           </div>
           <p className="text-xs text-muted-foreground">
             {apiOn
-              ? "Banco conectado: imagens de até 25 MB, salvas no servidor."
+              ? "Banco conectado: imagens salvas no servidor, sem limite de tamanho."
               : "Modo local: imagens de até ~1.5 MB."}
           </p>
           {draft.image && (
@@ -343,8 +336,43 @@ const AdminInner = () => {
               <h1 className="font-extrabold text-lg leading-none">Painel Admin</h1>
               <p className="text-xs text-muted-foreground">SmartCell — Gestão de produtos</p>
             </div>
+            <Badge
+              variant="outline"
+              className={
+                apiOn
+                  ? "gap-1.5 border-green-500/40 text-green-600"
+                  : "gap-1.5 border-amber-500/40 text-amber-600"
+              }
+              title={
+                apiOn
+                  ? "Produtos e imagens salvos no banco de dados da hospedagem"
+                  : "Banco não configurado — alterações ficam só neste navegador"
+              }
+            >
+              <Database className="h-3 w-3" />
+              {apiOn ? "Banco conectado" : "Modo local"}
+            </Badge>
           </div>
           <div className="flex items-center gap-2">
+            {apiOn && serverEmpty && (
+              <Button
+                variant="hero"
+                size="sm"
+                onClick={async () => {
+                  try {
+                    await syncToServer();
+                    toast.success("Catálogo enviado para o servidor");
+                  } catch {
+                    toast.error("Falha ao sincronizar", {
+                      description: "Verifique a configuração do banco.",
+                    });
+                  }
+                }}
+              >
+                <CloudUpload className="h-4 w-4" />
+                <span className="hidden sm:inline">Enviar catálogo ao servidor</span>
+              </Button>
+            )}
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="outline" size="sm">
